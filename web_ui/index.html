@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyReels V2 - Video Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🎬 SkyReels V2</h1>
+                <p>AI-Powered Video Generation</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Navigation Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="t2v">
+                    📝 Text-to-Video
+                </button>
+                <button class="tab-btn" data-tab="i2v">
+                    🖼️ Image-to-Video
+                </button>
+                <button class="tab-btn" data-tab="df">
+                    🎞️ Video Extension
+                </button>
+            </div>
+
+            <!-- T2V Tab -->
+            <div id="t2v" class="tab-content active">
+                <form id="t2vForm" class="form-container">
+                    <h2>Generate Video from Text</h2>
+                    
+                    <div class="form-group">
+                        <label for="t2v-prompt">📝 Prompt</label>
+                        <textarea id="t2v-prompt" placeholder="Describe the video you want to generate..." rows="4" required></textarea>
+                        <small>Be detailed and specific for best results</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="t2v-model">Model</label>
+                            <select id="t2v-model" required>
+                                <option value="Skywork/SkyReels-V2-T2V-14B-540P">T2V 540P (14B)</option>
+                                <option value="Skywork/SkyReels-V2-T2V-14B-720P">T2V 720P (14B)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="t2v-resolution">Resolution</label>
+                            <select id="t2v-resolution" required>
+                                <option value="540P">540P</option>
+                                <option value="720P">720P</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="t2v-frames">Frames <small id="t2v-duration">(4 sec)</small></label>
+                            <input type="number" id="t2v-frames" value="97" min="16" max="2000" required>
+                            <small>For 60 sec: use 1440 frames (60×24 FPS)</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="t2v-steps">Inference Steps</label>
+                            <input type="number" id="t2v-steps" value="30" min="10" max="50" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="t2v-guidance">Guidance Scale</label>
+                            <input type="number" id="t2v-guidance" value="6.0" min="1" max="20" step="0.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="t2v-shift">Shift</label>
+                            <input type="number" id="t2v-shift" value="8.0" min="1" max="20" step="0.5" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="t2v-seed">Seed</label>
+                            <input type="number" id="t2v-seed" placeholder="Random" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="t2v-fps">FPS</label>
+                            <input type="number" id="t2v-fps" value="24" min="10" max="120" required>
+                            <small>Higher FPS = smoother but slower generation</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="t2v-enhancer">
+                            ✨ Enable Prompt Enhancement
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-generate">Generate Video</button>
+                </form>
+            </div>
+
+            <!-- I2V Tab -->
+            <div id="i2v" class="tab-content">
+                <form id="i2vForm" class="form-container">
+                    <h2>Generate Video from Image</h2>
+                    
+                    <div class="form-group">
+                        <label for="i2v-image">🖼️ Input Image</label>
+                        <input type="file" id="i2v-image" accept="image/*" required>
+                        <div id="i2v-preview" class="image-preview"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="i2v-prompt">📝 Prompt (Optional)</label>
+                        <textarea id="i2v-prompt" placeholder="Describe the video motion..." rows="4"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="i2v-model">Model</label>
+                            <select id="i2v-model" required>
+                                <option value="Skywork/SkyReels-V2-I2V-1.3B-540P">I2V 540P (1.3B) - Fast</option>
+                                <option value="Skywork/SkyReels-V2-I2V-14B-540P">I2V 540P (14B) - Quality</option>
+                                <option value="Skywork/SkyReels-V2-I2V-14B-720P">I2V 720P (14B) - Best</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="i2v-resolution">Resolution</label>
+                            <select id="i2v-resolution" required>
+                                <option value="540P">540P</option>
+                                <option value="720P">720P</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="i2v-frames">Frames</label>
+                            <input type="number" id="i2v-frames" value="97" min="16" max="200" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="i2v-steps">Inference Steps</label>
+                            <input type="number" id="i2v-steps" value="30" min="10" max="50" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="i2v-guidance">Guidance Scale</label>
+                            <input type="number" id="i2v-guidance" value="6.0" min="1" max="20" step="0.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="i2v-seed">Seed</label>
+                            <input type="number" id="i2v-seed" placeholder="Random" min="0">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-generate">Generate Video</button>
+                </form>
+            </div>
+
+            <!-- DF Tab -->
+            <div id="df" class="tab-content">
+                <form id="dfForm" class="form-container">
+                    <h2>Extend Video (Diffusion Forcing)</h2>
+                    
+                    <div class="form-group">
+                        <label for="df-video">🎥 Input Video</label>
+                        <input type="file" id="df-video" accept="video/*" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="df-prompt">📝 Continuation Prompt</label>
+                        <textarea id="df-prompt" placeholder="Describe how the video should continue..." rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="df-model">Model</label>
+                            <select id="df-model" required>
+                                <option value="Skywork/SkyReels-V2-DF-1.3B-540P">DF 540P (1.3B) - Fast</option>
+                                <option value="Skywork/SkyReels-V2-DF-14B-540P">DF 540P (14B) - Quality</option>
+                                <option value="Skywork/SkyReels-V2-DF-14B-720P">DF 720P (14B) - Best</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="df-resolution">Resolution</label>
+                            <select id="df-resolution" required>
+                                <option value="540P">540P</option>
+                                <option value="720P">720P</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="df-frames">Total Frames</label>
+                            <input type="number" id="df-frames" value="97" min="16" max="300" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="df-overlap">Overlap History</label>
+                            <input type="number" id="df-overlap" value="17" min="1" max="50" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="df-steps">Inference Steps</label>
+                            <input type="number" id="df-steps" value="30" min="10" max="50" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="df-guidance">Guidance Scale</label>
+                            <input type="number" id="df-guidance" value="6.0" min="1" max="20" step="0.5" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-generate">Generate Extended Video</button>
+                </form>
+            </div>
+
+            <!-- Status Panel -->
+            <div class="status-panel">
+                <div id="status-message" class="status-message"></div>
+                <div id="progress-bar" class="progress-bar" style="display: none;">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>SkyReels V2 - Infinite-Length Film Generative Model</p>
+            <p><a href="https://github.com/SkyworkAI/SkyReels-V2" target="_blank">GitHub</a> | <a href="https://huggingface.co/collections/Skywork/skyreels-v2-6801b1b93df627d441d0d0d9" target="_blank">Hugging Face</a></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
